@@ -68,4 +68,46 @@ router.get("/logout", auth, (req, res) => {
     });
 });
 
+router.post("/addToCart",auth, (req,res)=>{
+
+    User.find({_id:req.user._id},
+        (err,userInfo)=>{
+            let duplicate=false;
+            userInfo.cart.forEach((cartInfo)=>{
+                if(cartInfo.id===req.query.productId){
+                    duplicate=true;
+                }
+            })
+            if (duplicate){
+                User.findOneAndUpdate(
+                    {_id:req.user._id, "cart.id": req.query.productId},
+                    {$inc:{"cart.$quantiyty":1}},
+                    {new:true},
+                    ()=>{
+                        if(err) return res.json({success:false,err});
+                        res.status(200).json(userInfo.cart)
+                    }
+
+                )
+            }else {
+                User.findByIdAndUpdate(
+                    {_id:req.User._id, "cart.id": req.query._id},
+                    {$push:{
+                        cart:{
+                            id:req.query.productId,
+                            quantity:1,
+                            date:Date.now()
+                        }
+                    }},
+                    {new:true},
+                    (er,userInfo)=>{
+                        if(err) return res.json({success:false,err});
+                        res.status(200).json(userInfo.cart)
+                    }
+                )
+            }
+        })
+
+})
+
 module.exports = router;

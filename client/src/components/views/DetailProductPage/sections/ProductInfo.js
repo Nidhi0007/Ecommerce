@@ -7,6 +7,10 @@ function ProductInfo(props) {
         setProduct(props.detail)
      
     }, [props.detail])
+    const addToCartHandler=()=>{
+props.addTocart(props.detail._id)
+
+    }
     return (
         <div>
         <Descriptions title="Product Info">
@@ -16,7 +20,8 @@ function ProductInfo(props) {
         <Descriptions.Item label="Description">{Product.descriptions}</Descriptions.Item>
         <br/>
         <div style={{dispaly:"flex", justifyContent:'center'}}>
-<Button size="large" shape="round" type="danger" onClick>
+<Button size="large" shape="round" type="danger" 
+onClick={addToCartHandler}>
     Add to Cart
 
 </Button>

@@ -4,6 +4,10 @@ import { Row, Col } from 'antd';
 import ProductImage from './sections/ProductImage';
 import ProductInfo from './sections/ProductInfo';
 
+import {addTocart} from '../../../_actions/user_actions';
+
+
+
 import { useDispatch } from 'react-redux';
 function DetailProductPage(props) {
     const dispatch = useDispatch();
@@ -18,7 +22,10 @@ function DetailProductPage(props) {
 
     }, [])
 
+const addToCartHandler=(productId)=>{
+    dispatch(addTocart())
 
+}
 
     return (
         <div className="postPage" style={{ width: '100%', padding: '3rem 4rem' }}>
@@ -35,7 +42,7 @@ function DetailProductPage(props) {
                 </Col>
                 <Col lg={12} xs={24}>
                     <ProductInfo
-                      
+                      addTocart={addToCartHandler}
                         detail={Product} />
                 </Col>
             </Row>
