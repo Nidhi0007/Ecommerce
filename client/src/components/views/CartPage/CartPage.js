@@ -3,6 +3,8 @@ import { useDispatch } from 'react-redux'
 import { getCartItems, removeCartItem } from '../../../_actions/user_actions'
 import UserCardBlock from './sections/UserCardBlock'
 import { Result, Empty } from 'antd'
+import Paypal from '../../utils/Paypal'
+import Axios from 'axios'
 // function CartPage
 
 function CartPage(props) {
@@ -52,7 +54,28 @@ function CartPage(props) {
                 }
             })
     }
+    const transactionSuccess=(data)=>{
+        let variables ={
+            cartDetail:props.user.cartDetail, paymentData:data
 
+        }
+        Axios.post('/api/users/successBuy', variables)
+        .then(response=>{
+            if(response.data.success){
+
+            }else{
+                alert('failed to buy')
+            }
+        })
+
+    }
+    const transactionErrors=()=>{
+        console.log('paypal Error')
+    }
+
+    const transectionCancelled=()=>{
+        console.log('paypal Cancelled')
+    }
     return (
         <div style={{ width: '85%', margin: '3rem auto' }}>
             <h1>My Cart</h1>
@@ -88,8 +111,15 @@ function CartPage(props) {
 
 
      
+{/* paypal button */}
+     <Paypal 
+     
+     toPay={Total}
+     onSuccess={transactionSuccess}
+     transactionError={transactionErrors}
+     transactionCancel={transectionCancelled}
 
-           
+     />      
 
 
         </div>
